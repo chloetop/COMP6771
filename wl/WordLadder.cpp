@@ -12,7 +12,7 @@
 #include <iostream>
 
 int main() {
-
+	std::cout<<"Hello World! "<<std::endl;
 	// [TODO: fill in the code]
 	return 0;
 }
