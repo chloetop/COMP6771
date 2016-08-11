@@ -1,0 +1,4 @@
+WordLadder.o: WordLadder.cpp genlib.h lexicon.h
+genlib.o: genlib.cpp genlib.h
+lexicon.o: lexicon.cpp lexicon.h genlib.h strutils.h
+strutils.o: strutils.cpp genlib.h
