@@ -99,7 +99,7 @@ int main() {
 	//Initialisation
 	WordLadder wl;
 	int flag = 1;
-	int start_flag = 1;
+	// int start_flag = 1;
 	Lexicon english("EnglishWords.dat");
 	std::string start;
 	std::string end;
