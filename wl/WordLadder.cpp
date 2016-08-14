@@ -157,7 +157,7 @@ int main() {
 			if(s!=end)std::cout<<" ";
 		}
 	}
-	std::cout<<std::endl<<std::endl;
+	std::cout<<std::endl;
 	
 
 	// Elapsed time measurement
