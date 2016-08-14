@@ -132,6 +132,7 @@ int main() {
 		// std::cin.sync();
 		std::cout<<"Enter destination word: ";
 		getline(std::cin,end);
+		std::cin.sync();
 		if(start.length() != end.length()) return 0;
 		vect_vect_str results = wl.findLadders(start,end,english);
 
