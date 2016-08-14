@@ -116,8 +116,8 @@ int main() {
 	//Input block
 	while(1){
 		std::cout<<"Enter start word (RETURN to quit): ";
-		std::cin.getline(start);
-		if(!start_flag){
+		getline(std::cin,start);
+		if(start_flag){
 			std::cin.ignore();
 			std::cin.ignore();
 			std::cin.ignore();
