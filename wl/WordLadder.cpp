@@ -43,7 +43,7 @@ public:
 			int dis=ladder[word]+1;
 			// Invalid case. 
 			if (dis>min) break;
-			for (int i=0;i<word.size();i++){
+			for (u_int i=0;i<word.size();i++){
 				std::string temp=word;
 
 				// start generating permutations and compare it against words from Lexicon DS. If words match, Keep them as a part of ladder, else discard.
