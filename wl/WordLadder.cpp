@@ -138,7 +138,7 @@ int main() {
 		// std::cout<<"wlmin: "<<wl.min;
 		if(results.size() != 0) std::cout<<"Found ladder: ";
 		else {
-			std::cout<<"No ladder found."<<std::endl;
+			std::cout<<"No ladder found."<<std::endl<<std::endl;
 			// gettimeofday(&time, NULL);
 			// totalTime = (((time.tv_sec * 1000) + (time.tv_usec / 1000)) - totalTime);
 			// std::cout<<"Elasped time is "<<totalTime<<"ms"<<std::endl;
