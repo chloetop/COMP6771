@@ -117,8 +117,12 @@ int main() {
 	while(1){
 		std::cout<<"Enter start word (RETURN to quit): ";
 		getline(std::cin,start);
-		if(!start_flag)
-		std::cin.ignore();
+		if(!start_flag){
+			std::cin.ignore();
+			std::cin.ignore();
+			std::cin.ignore();
+		}
+		
 		if (start == "") {
 			std::cout<<"Exiting";
 		    return 0;
