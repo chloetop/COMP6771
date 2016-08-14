@@ -117,6 +117,7 @@ int main() {
 	while(1){
 		std::cout<<"Enter start word (RETURN to quit): ";
 		getline(std::cin,start);
+		std::cin.sync();
 
 		// if(!start_flag){
 		// 	//std::cin.ignore() is not cleaning cin cache. reading once again solves the issue.
