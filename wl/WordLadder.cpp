@@ -127,7 +127,7 @@ int main() {
 		std::cout<<"Enter destination word: ";
 		getline(std::cin,end);
 		if(start.length() != end.length()) return 0;
-		std::cout<<start<<end;
+		// std::cout<<start<<end;
 		vect_vect_str results = wl[i].findLadders(start,end,english);
 		i++;
 
@@ -137,7 +137,7 @@ int main() {
 		// std::cout<<"wlmin: "<<wl.min; // debug print statement
 		if(results.size() != 0) std::cout<<"Found ladder: ";
 		else {
-			std::cout<<"No ladder found."<<start<<end<<std::endl<<std::endl;
+			std::cout<<"No ladder found."<<std::endl<<std::endl;
 			// gettimeofday(&time, NULL);
 			// totalTime = (((time.tv_sec * 1000) + (time.tv_usec / 1000)) - totalTime);
 			// std::cout<<"Elasped time is "<<totalTime<<"ms"<<std::endl;
