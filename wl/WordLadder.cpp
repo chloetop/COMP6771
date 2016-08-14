@@ -135,13 +135,13 @@ int main() {
 		// Borrowed from http://stackoverflow.com/questions/22155451/sorting-a-list-of-vectors-lexicographically-according-to-priorities
 		std::sort(results.begin(),results.end()); 
 		// std::cout<<"wlmin: "<<wl.min;
-		if(wl.min != 2) std::cout<<"Found ladder: ";
+		if(wl.min != 0) std::cout<<"Found ladder: ";
 		else {
 			std::cout<<"No ladder found.";
 			// gettimeofday(&time, NULL);
 			// totalTime = (((time.tv_sec * 1000) + (time.tv_usec / 1000)) - totalTime);
 			// std::cout<<"Elasped time is "<<totalTime<<"ms"<<std::endl;
-			return 0;
+			continue;
 		}
 		//printing results
 		// Borrowed from http://stackoverflow.com/a/21715062/5536234
