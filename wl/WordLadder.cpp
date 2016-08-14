@@ -122,7 +122,6 @@ int main() {
 		}
 		
 		if (start == "") {
-			std::cout<<"Exiting";
 		    return 0;
 		}
 		start_flag = 0;
@@ -134,6 +133,7 @@ int main() {
 		//Sorting results lexicographically
 		// Borrowed from http://stackoverflow.com/questions/22155451/sorting-a-list-of-vectors-lexicographically-according-to-priorities
 		std::sort(results.begin(),results.end()); 
+		std::cout<<"wlmin: "<<wl.min;
 		if(wl.min != 0) std::cout<<"Found ladder: ";
 		else {
 			std::cout<<"No ladder found.";
