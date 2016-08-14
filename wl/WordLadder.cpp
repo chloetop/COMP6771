@@ -92,9 +92,9 @@ private:
 };
 int main() {
 	//Declaration for measuring time complexity
-	struct timeval time;
-	gettimeofday(&time, NULL);
-	long totalTime = (time.tv_sec * 1000) + (time.tv_usec / 1000);
+	// struct timeval time;
+	// gettimeofday(&time, NULL);
+	// long totalTime = (time.tv_sec * 1000) + (time.tv_usec / 1000);
 
 	//Initialisation
 	WordLadder wl;
@@ -161,9 +161,9 @@ int main() {
 	}
 
 	// Elapsed time measurement
-	gettimeofday(&time, NULL);
-	totalTime = (((time.tv_sec * 1000) + (time.tv_usec / 1000)) - totalTime);
-	std::cout<<"Elasped time is "<<totalTime<<"ms"<<std::endl;
-	return 0;
+	// gettimeofday(&time, NULL);
+	// totalTime = (((time.tv_sec * 1000) + (time.tv_usec / 1000)) - totalTime);
+	// std::cout<<"Elasped time is "<<totalTime<<"ms"<<std::endl;
+	// return 0;
 }
 
