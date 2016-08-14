@@ -126,6 +126,7 @@ int main() {
 		if (start == "") {
 		    return 0;
 		}
+		std::cin.sync();
 		start_flag = 0;
 		std::cout<<"Enter destination word: ";
 		std::cin>>end;
