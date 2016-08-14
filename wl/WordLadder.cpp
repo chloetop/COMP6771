@@ -7,6 +7,7 @@
 #include <algorithm>
 #include "lexicon.h"
 #include <string.h>
+ #include <stdio.h>
 #include <queue>
 #include <vector>
 #include <iostream>
@@ -22,6 +23,7 @@ typedef std::vector<std::string> vect_str;
 
 class WordLadder {
 public:
+	~WordLadder();
 	int min = large_num;
 	vect_vect_str findLadders(std::string start, std::string end, Lexicon dict) {
 		
@@ -90,6 +92,9 @@ private:
 		block.pop_back();
 	}
 };
+WordLadder::~WordLadder(void){
+
+}
 int main() {
 	//Declaration for measuring time complexity
 	// struct timeval time;
@@ -97,9 +102,9 @@ int main() {
 	// long totalTime = (time.tv_sec * 1000) + (time.tv_usec / 1000);
 
 	//Initialisation
-	WordLadder wl;
+	WordLadder wl[50];
 	int flag = 1;
-	// int start_flag = 1;
+	int i=0;
 	Lexicon english("EnglishWords.dat");
 	std::string start;
 	std::string end;
@@ -108,45 +113,46 @@ int main() {
 	//case 1:
 	// std::string start = "gimlets";
 	// std::string end = "treeing";
-
+	
 	//case 2:
 	// std::string start = "skinked";
 	// std::string end = "venters";
-
 	//Input block
 	while(1){
 		std::cout<<"Enter start word (RETURN to quit): ";
-		// getline(std::cin,start);
-		start = std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
-
-		// if(!start_flag){
-		// 	//std::cin.ignore() is not cleaning cin cache. reading once again solves the issue.
-		// 	getline(std::cin,start);
-		// 	start_flag = 1;
-		// }
+		getline(std::cin,start);
 		if (start == "") {
 		    return 0;
 		}
-		// std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
-		// std::cin.sync();
-		// std::cin.sync();
 		std::cout<<"Enter destination word: ";
-		end = std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
-		// getline(std::cin,end);
-		// std::cin.sync();
+		getline(std::cin,end);
 		if(start.length() != end.length()) return 0;
-		vect_vect_str results = wl.findLadders(start,end,english);
+		std::cout<<start<<end;
+		vect_vect_str results = wl[i].findLadders(start,end,english);
+		i++;
 
 		//Sorting results lexicographically
 		// Borrowed from http://stackoverflow.com/questions/22155451/sorting-a-list-of-vectors-lexicographically-according-to-priorities
 		std::sort(results.begin(),results.end()); 
-		// std::cout<<"wlmin: "<<wl.min;
+		// std::cout<<"wlmin: "<<wl.min; // debug print statement
 		if(results.size() != 0) std::cout<<"Found ladder: ";
 		else {
-			std::cout<<"No ladder found."<<std::endl<<std::endl;
+			std::cout<<"No ladder found."<<start<<end<<std::endl<<std::endl;
 			// gettimeofday(&time, NULL);
 			// totalTime = (((time.tv_sec * 1000) + (time.tv_usec / 1000)) - totalTime);
 			// std::cout<<"Elasped time is "<<totalTime<<"ms"<<std::endl;
+			for(auto const& string_vec : results){
+			for( auto const& s : string_vec ){
+				if(s==start && flag == 0){
+					// Add new line char at the beginning of ladders except first ladder.
+					std::cout<<std::endl;
+				}
+				flag = 0;
+				std::cout << s;
+				//To add space between words
+				if(s!=end)std::cout<<" ";
+			}
+		}
 			continue;
 		}
 		//printing results
