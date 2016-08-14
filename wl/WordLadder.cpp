@@ -102,7 +102,7 @@ int main() {
 	// long totalTime = (time.tv_sec * 1000) + (time.tv_usec / 1000);
 
 	//Initialisation
-	WordLadder wl[50];
+	WordLadder wl;
 	int flag = 1;
 	int i=0;
 	Lexicon english("EnglishWords.dat");
@@ -118,64 +118,52 @@ int main() {
 	// std::string start = "skinked";
 	// std::string end = "venters";
 	//Input block
-	while(1){
-		std::cout<<"Enter start word (RETURN to quit): ";
-		getline(std::cin,start);
-		if (start == "") {
-		    return 0;
-		}
-		std::cout<<"Enter destination word: ";
-		getline(std::cin,end);
-		if(start.length() != end.length()) return 0;
-		// std::cout<<start<<end;
-		vect_vect_str results = wl[i].findLadders(start,end,english);
-		i++;
 
-		//Sorting results lexicographically
-		// Borrowed from http://stackoverflow.com/questions/22155451/sorting-a-list-of-vectors-lexicographically-according-to-priorities
-		std::sort(results.begin(),results.end()); 
-		// std::cout<<"wlmin: "<<wl.min; // debug print statement
-		if(results.size() != 0) std::cout<<"Found ladder: ";
-		else {
-			std::cout<<"No ladder found."<<std::endl<<std::endl;
-			// gettimeofday(&time, NULL);
-			// totalTime = (((time.tv_sec * 1000) + (time.tv_usec / 1000)) - totalTime);
-			// std::cout<<"Elasped time is "<<totalTime<<"ms"<<std::endl;
-			for(auto const& string_vec : results){
-			for( auto const& s : string_vec ){
-				if(s==start && flag == 0){
-					// Add new line char at the beginning of ladders except first ladder.
-					std::cout<<std::endl;
-				}
-				flag = 0;
-				std::cout << s;
-				//To add space between words
-				if(s!=end)std::cout<<" ";
-			}
-		}
-			continue;
-		}
-		//printing results
-		// Borrowed from http://stackoverflow.com/a/21715062/5536234
-		for(auto const& string_vec : results){
-			for( auto const& s : string_vec ){
-				if(s==start && flag == 0){
-					// Add new line char at the beginning of ladders except first ladder.
-					std::cout<<std::endl;
-				}
-				flag = 0;
-				std::cout << s;
-				//To add space between words
-				if(s!=end)std::cout<<" ";
-			}
-		}
-		std::cout<<std::endl<<std::endl;
+	std::cout<<"Enter start word (RETURN to quit): ";
+	getline(std::cin,start);
+	if (start == "") {
+	    return 0;
 	}
+	std::cout<<"Enter destination word: ";
+	getline(std::cin,end);
+	if(start.length() != end.length()) return 0;
+	// std::cout<<start<<end;
+	vect_vect_str results = wl.findLadders(start,end,english);
+	i++;
+
+	//Sorting results lexicographically
+	// Borrowed from http://stackoverflow.com/questions/22155451/sorting-a-list-of-vectors-lexicographically-according-to-priorities
+	std::sort(results.begin(),results.end()); 
+	// std::cout<<"wlmin: "<<wl.min; // debug print statement
+	if(results.size() != 0) std::cout<<"Found ladder: ";
+	else {
+		std::cout<<"No ladder found."<<std::endl;
+		// gettimeofday(&time, NULL);
+		// totalTime = (((time.tv_sec * 1000) + (time.tv_usec / 1000)) - totalTime);
+		// std::cout<<"Elasped time is "<<totalTime<<"ms"<<std::endl;
+		return 0;
+	}
+	//printing results
+	// Borrowed from http://stackoverflow.com/a/21715062/5536234
+	for(auto const& string_vec : results){
+		for( auto const& s : string_vec ){
+			if(s==start && flag == 0){
+				// Add new line char at the beginning of ladders except first ladder.
+				std::cout<<std::endl;
+			}
+			flag = 0;
+			std::cout << s;
+			//To add space between words
+			if(s!=end)std::cout<<" ";
+		}
+	}
+	std::cout<<std::endl<<std::endl;
+	
 
 	// Elapsed time measurement
 	// gettimeofday(&time, NULL);
 	// totalTime = (((time.tv_sec * 1000) + (time.tv_usec / 1000)) - totalTime);
 	// std::cout<<"Elasped time is "<<totalTime<<"ms"<<std::endl;
-	// return 0;
+	return 0;
 }
 
