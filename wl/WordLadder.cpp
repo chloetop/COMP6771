@@ -4,6 +4,7 @@
  * Name: Subramanya Vajiraya, z5081713
  * This file is the starter project for the word ladder problem on Assignment #1.
  */
+#include <algorithm>
 #include "lexicon.h"
 #include <string.h>
 #include <queue>
