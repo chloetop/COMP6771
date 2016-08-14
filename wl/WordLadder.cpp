@@ -120,6 +120,7 @@ int main() {
 		if(!start_flag){
 			//std::cin.ignore() is not cleaning cin cache. reading once again solves the issue.
 			getline(std::cin,start);
+			start_flag = 1;
 		}
 		
 		if (start == "") {
