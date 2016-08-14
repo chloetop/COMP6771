@@ -135,7 +135,7 @@ int main() {
 		// Borrowed from http://stackoverflow.com/questions/22155451/sorting-a-list-of-vectors-lexicographically-according-to-priorities
 		std::sort(results.begin(),results.end()); 
 		// std::cout<<"wlmin: "<<wl.min;
-		if(wl.min != 0) std::cout<<"Found ladder: ";
+		if(results.size() != 0) std::cout<<"Found ladder: ";
 		else {
 			std::cout<<"No ladder found.";
 			// gettimeofday(&time, NULL);
