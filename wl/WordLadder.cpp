@@ -127,11 +127,11 @@ int main() {
 		if (start == "") {
 		    return 0;
 		}
-		std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
-		std::cin.sync();
+		// std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+		// std::cin.sync();
 		// std::cin.sync();
 		std::cout<<"Enter destination word: ";
-		std::cin>>end;
+		getline(std::cin,end);
 		if(start.length() != end.length()) return 0;
 		vect_vect_str results = wl.findLadders(start,end,english);
 
