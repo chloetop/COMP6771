@@ -118,6 +118,7 @@ int main() {
 		std::cout<<"Enter start word (RETURN to quit): ";
 		getline(std::cin,start);
 		if(!start_flag){
+			//std::cin.ignore() is not cleaning cin cache. reading once again solves the issue.
 			getline(std::cin,start);
 		}
 		
@@ -133,8 +134,8 @@ int main() {
 		//Sorting results lexicographically
 		// Borrowed from http://stackoverflow.com/questions/22155451/sorting-a-list-of-vectors-lexicographically-according-to-priorities
 		std::sort(results.begin(),results.end()); 
-		std::cout<<"wlmin: "<<wl.min;
-		if(wl.min != 0) std::cout<<"Found ladder: ";
+		// std::cout<<"wlmin: "<<wl.min;
+		if(wl.min != 2) std::cout<<"Found ladder: ";
 		else {
 			std::cout<<"No ladder found.";
 			gettimeofday(&time, NULL);
