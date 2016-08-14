@@ -128,6 +128,7 @@ int main() {
 		    return 0;
 		}
 		std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');
+		std::cin.sync();
 		// std::cin.sync();
 		std::cout<<"Enter destination word: ";
 		std::cin>>end;
