@@ -64,7 +64,7 @@ public:
 						continue;
 					}
 					// If permutation is the target, skip the iteration.
-					if (temp == end) break;
+					if (temp == end) continue;
 					if (ladder[temp]<dis) continue;
 					else if (ladder[temp]==dis)
 						graph[temp].push_back(word);
