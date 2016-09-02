@@ -4,10 +4,9 @@
 #include <iostream>
 #include <cassert>
 #include <numeric>
-#include <math.h>  
+#include <cmath>  
 
 namespace evec {
-
 // sorted according to order in header file
 
 EuclideanVector& EuclideanVector::operator+=(const EuclideanVector& rhs) {

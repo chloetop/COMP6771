@@ -1,19 +1,16 @@
-
-#ifndef EUCLIDEANVECTOR_H_
-#define EUCLIDEANVECTOR_H_
-
 #include <sys/types.h>
 #include <algorithm>
 #include <vector>
 #include <list>
 #include <numeric>
-#include <math.h>    
+#include <cmath>    
 
 namespace evec {
 
 class EuclideanVector {
  private:
   std::vector<double> v_;
+  std::initializer_list<int> num;
 
  public:
   // constructors
@@ -32,6 +29,8 @@ class EuclideanVector {
                   const Iter& end,
                   typename Iter::iterator_category* p = 0)
       : v_{begin, end} {}
+
+  EuclideanVector(std::initializer_list<int> num):v_(num.begin(), num.end()){}
 
   // Big 5 synthesized
 
@@ -115,6 +114,4 @@ inline EuclideanVector operator/(EuclideanVector lhs, const double factor) {
   return lhs /= factor;
 }
 
-}  // namespace evec
-
-#endif  // EUCLIDEANVECTOR_H_
+}

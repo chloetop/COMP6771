@@ -1,7 +1,6 @@
 #include <iostream>
 #include <vector>
 #include <list>
-
 #include "EuclideanVector.h"
 
 int main() {
