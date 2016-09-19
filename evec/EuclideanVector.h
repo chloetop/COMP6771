@@ -8,77 +8,69 @@
 namespace evec {
 
 class EuclideanVector {
- private:
-  std::vector<double> v_;
-  std::initializer_list<int> num;
 
  public:
-  // constructors
+  double *v;
+  std::initializer_list<int> num;
+  std::vector<double> v_;
+  // Constructors
   EuclideanVector() : EuclideanVector(0, 0.0) {}
-
   template <typename Integer>
   EuclideanVector(const Integer size) : EuclideanVector(size, 0.0) {}
-
   template <typename Integer, typename Num>
-  EuclideanVector(const Integer size, const Num magnitude)
-      : v_(static_cast<uint>(size), static_cast<double>(magnitude)) {}
-
-  // range
+  EuclideanVector(const Integer size, const Num magnitude){
+        v = new double[static_cast<uint>(size)];
+        v[0] = static_cast<double>(magnitude);
+        push_data(v,static_cast<uint>(size));
+      }
   template <typename Iter>
   EuclideanVector(const Iter& begin,
                   const Iter& end,
-                  typename Iter::iterator_category* p = 0)
-      : v_{begin, end} {}
+                  typename Iter::iterator_category* p = 0): v_{begin, end} {
+      }
+  EuclideanVector(std::initializer_list<int> num):v_(num.begin(), num.end()){
+  }
 
-  EuclideanVector(std::initializer_list<int> num):v_(num.begin(), num.end()){}
+  ~EuclideanVector(){
+    delete(v);
+  }
 
-  // Big 5 synthesized
+   // Returns the number of dimensions in a particular vector.
 
-  // utilities
-
-  /**
-   * Returns an unsigned int containing the number of dimensions in a particular
-   * vector.
-   */
   uint getNumDimensions() const { return static_cast<uint>(v_.capacity()); }
-  /**
-   * Returns a double, the value of the magnitude in the dimension given as the
-   * function parameter
-   */
+  
+   // Returns a double, the value of the magnitude in the dimension given as the
+   // function parameter
+   
   double get(uint i) const { return v_[i]; }
-  /**
-   * Returns the euclidean norm of the vector as a double. The euclidean norm is
-   * the square root of the sum of the squares of the magnitudes in each
-   * dimension.
-   */
+
+  void push_data(double a[],int size_of_array){
+    for(int i=0;i<size_of_array;i++) v_.push_back(v[0]);
+  } 
+  // Returns the euclidean norm of the vector as a double. 
+  // 
   double getEuclideanNorm() const {
     return sqrt(std::inner_product(v_.begin(), v_.end(), v_.begin(), 0.0));
   }
-  /**
-   * Returns a Euclidean vector that is the unit vector of *this vector, where
-   * the magnitude for each dimension in the unit vector is the original
-   * vector's magnitude divided by the euclidean norm.
-   */
+// Returns a Euclidean vector that is the unit vector of *THIS
   EuclideanVector createUnitVector() const {
     return EuclideanVector(*this) /= getEuclideanNorm();
   }
+// (OVER)LOADING ZONE ... WATCH OUT
 
-  // operators
-  double operator[](int i) const { return v_[i]; }  // getter
-  double& operator[](int i) { return v_[i]; }       // setter
-  EuclideanVector& operator+=(const EuclideanVector& rhs);
-  EuclideanVector& operator-=(const EuclideanVector& rhs);
-  EuclideanVector& operator*=(const double d);
-  EuclideanVector& operator/=(const double d);
-
-  // casting
+  double operator[](int i) const { return v_[i]; }  
+  double& operator[](int i) { return v_[i]; }    
+  
   operator std::vector<double>() const {
     return std::vector<double>(v_.begin(), v_.end());
   }
   operator std::list<double>() const {
     return std::list<double>(v_.begin(), v_.end());
   }
-
+  EuclideanVector& operator+=(const EuclideanVector& rhs);
+  EuclideanVector& operator-=(const EuclideanVector& rhs);
+  EuclideanVector& operator*=(const double d);
+  EuclideanVector& operator/=(const double d);
   friend std::ostream& operator<<(std::ostream& os, const EuclideanVector& v);
   friend bool operator==(const EuclideanVector& lhs,
                          const EuclideanVector& rhs);
@@ -89,8 +81,6 @@ class EuclideanVector {
 inline bool operator!=(const EuclideanVector& lhs, const EuclideanVector& rhs) {
   return !(lhs == rhs);
 }
-
-// depend on existing {+,-,*,/}= operators
 
 inline EuclideanVector operator+(EuclideanVector lhs,
                                  const EuclideanVector& rhs) {
