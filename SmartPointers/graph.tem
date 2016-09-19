@@ -1,3 +1,19 @@
+ /////////////////////////////////////////////////////////////// 
+ //    														  //
+ //                         ###    ######   ######      ##    //
+ //                        ##      ##  ##   ##  ##     ###    //
+ //      #####    #####   ##           ##       ##      ##    //
+ //     ##       ##       #####       ##       ##       ##    //
+ //     ##        ####    ##  ##      ##       ##       ##    //
+ //     ##           ##   ##  ##     ##       ##        ##    //
+ //      #####   #####     ####      ##       ##        ##    //
+ //    														  //
+ //     		COMP6771 Assignment_3: SmartPointers		  //
+ //     				TEMPLATE FILE					  	  //
+ //    														  //
+ ///////////////////////////////////////////////////////////////
+
+
 template <typename N, typename E>
 	class Graph
 	{
@@ -18,7 +34,7 @@ template <typename N, typename E>
 					std::cout << std::endl;
 				} 
 				~Node() {
-					if (DEBUG) std::cout << "~node" << std::endl;
+				
 					edges_.clear();
 				}
 				void update () {
@@ -35,7 +51,7 @@ template <typename N, typename E>
 				std::weak_ptr<Node> orig;
 				std::weak_ptr<Node> dest;
 				E val_;
-				Edge(std::shared_ptr<Node> o, std::shared_ptr<Node> d, E x) : val_{x} {//orig{o}, dest{d}, 
+				Edge(std::shared_ptr<Node> o, std::shared_ptr<Node> d, E x) : val_{x} {
 					orig = o;
 					dest = d;
 				}
@@ -45,7 +61,7 @@ template <typename N, typename E>
 						std::cout << "[" << val_ << "] " << tmp->val_ << " ";
 				}
 				~Edge() {
-					if (DEBUG) std::cout << "~edge" << std::endl;
+				
 					orig.reset();
 					dest.reset();
 				}
@@ -72,25 +88,23 @@ template <typename N, typename E>
 			//Destructor
 			~Graph()
 			{
-				if (DEBUG) std::cout << "~graph" << std::endl;
+			
 				nodes_.clear();
 			};
 
 			//=copy Operator (deep copy)
 			Graph& operator=(const Graph &g)
 			{
-				if (DEBUG) std::cout << "copy operator" << std::endl;
+			
 				if (nodes_ != g.nodes_) {
 					nodes_.erase(nodes_.begin(),nodes_.end());
-					// add all the nodes to the new graph
 					for (auto node : g.nodes_) {
-						//auto newNode = std::make_shared<Node>(Node{node->second->val_});
 						nodes_[node.second->val_] = std::make_shared<Node>(Node{node.second->val_});
 					}
 					// add all the edges
 					for (auto node : g.nodes_) {
 						for (auto edge : node.second->edges_) {
-							if (DEBUG) (*edge).printEdge();
+						
 							// must use successive if statements because of auto type deduction
 							if (auto tmp1 = edge->dest.lock()) {
 								auto orig = nodes_.find(tmp1->val_);
@@ -108,7 +122,7 @@ template <typename N, typename E>
 			//=move Operator
 			Graph& operator=(Graph &&g)
 			{
-				if (DEBUG) std::cout << "move operator" << std::endl;
+			
 				if ((*this).nodes_ != g.nodes_) {
 					nodes_ = std::move(g.nodes_);
 				}
@@ -118,10 +132,10 @@ template <typename N, typename E>
 			bool addNode(const N& val_)
 			{
 				if (nodes_.find(val_) == nodes_.end()) {
-					if (DEBUG) std::cout << "adding: " << val_ << std::endl;
+				
 					nodes_[val_] = std::make_shared<Node>(Node{val_});
 				} else {
-					if (DEBUG) std::cout << val_ << ": not added. Already exists" << std::endl;
+				
 					return false;
 				}
 
@@ -132,15 +146,11 @@ template <typename N, typename E>
 			{
 				// check that both orig and dest exist
 				auto findOrig = nodes_.find(orig);
-				if (findOrig == nodes_.end()) throw std::runtime_error("addEdge: origin DNE");
+				if (findOrig == nodes_.end()) throw std::runtime_error("addEdge: origin Does not exist");
 				auto findDest = nodes_.find(dest);
-				if (findDest == nodes_.end()) throw std::runtime_error("addEdge: dest DNE");
-				//if (findDest == nodes_.end()) std::runtime_error("cannot add edge from"+orig+" to "+dest+", "+dest+" does not exist");
+				if (findDest == nodes_.end()) throw std::runtime_error("addEdge: dest Does not exist");
 
 				// check if the edge between already exists
-				// auto findEdge = std::find_if(findOrig->second->edges_.begin(),findOrig->second->edges_.end(),
-				// 							[val_] (const std::shared_ptr<Edge>& e) {return e->val_==val_;});
-
 				// find if the edge already exists (i.e an existing edge with the same value AND destination)
 				auto findEdge = std::find_if(findOrig->second->edges_.begin(),findOrig->second->edges_.end(),
 											[val,dest] (const std::shared_ptr<Edge>& e) {
@@ -152,11 +162,11 @@ template <typename N, typename E>
 											});
 
 				if (findEdge == findOrig->second->edges_.end()) {
-					if (DEBUG) std::cout << "adding edge: " << orig << " " << dest << " " << val << std::endl;
+				
 					findOrig->second->edges_.insert(std::make_shared<Edge>(Edge(findOrig->second,findDest->second,val)));
 					++findOrig->second->numEdges_;
 					return true;
-				} else if (DEBUG) {
+			
 					std::cout << orig << "->" << dest << " not added. Already exists" << std::endl;
 				}
 				return false;
@@ -167,29 +177,29 @@ template <typename N, typename E>
 			{
 				// check the node exists
 				auto findNode = nodes_.find(node);
-				if (findNode == nodes_.end()) throw std::runtime_error("replace: Node DNE");
+				if (findNode == nodes_.end()) throw std::runtime_error("replace: Node Does not exist");
 
 				// check if val already exists
 				auto findval_ = nodes_.find(val);
 
 				if (findval_ == nodes_.end()) {
-					if (DEBUG) std::cout << "replacing " << findNode->second->val_ << " with " << val << std::endl;
+				
 					nodes_[val] = nodes_[node];
 					nodes_[val]->val_ = val;
 					nodes_.erase(findNode);
 					//findNode->second->val_ = 66;	
 					return true;
 				}
-				if (DEBUG) std::cout << "replace: " <<val << " already exists" << std::endl;
+			
 				return false;
 			} 
 
 			void mergeReplace(const N& oldNode, const N& newNode) {
 				// if either the old or new node DNE, throw an error
 				auto findOld = nodes_.find(oldNode);
-				if (findOld == nodes_.end()) throw std::runtime_error("mergeReplace: old DNE");
+				if (findOld == nodes_.end()) throw std::runtime_error("mergeReplace: old Does not exist");
 				auto findNew = nodes_.find(newNode);
-				if (findNew == nodes_.end()) throw std::runtime_error("mergeReplace: new DNE");
+				if (findNew == nodes_.end()) throw std::runtime_error("mergeReplace: new Does not exist");
 				
 				// for each edge in oldNode
 				for (auto edge : findOld->second->edges_) {		
@@ -204,7 +214,6 @@ template <typename N, typename E>
 						N dest = lockedDest->val_;
 						auto findEdge = std::find_if(findNew->second->edges_.begin(),findNew->second->edges_.end(),
 											[&val,&dest] (const std::shared_ptr<Edge>& e) {
-												// std::cout << "comparing " << e->val_ << " " << val << std::endl;
 												if (!(e->val_ < val) && !(val < e->val_))
 													if (auto tmp = e->dest.lock())
 														if (!(tmp->val_ < dest) && !(dest < tmp->val_))
@@ -215,10 +224,8 @@ template <typename N, typename E>
 						// if it doesn't, add it
 						if (findEdge == findNew->second->edges_.end()) {
 							findNew->second->edges_.insert(std::make_shared<Edge>(Edge(findNew->second,lockedDest,edge->val_)));
-							
-							//findNew->second->edges_.insert(edge));
 							++findNew->second->numEdges_;
-						} else if (DEBUG) {
+					
 							std::cout << "In mergeReplace: " << newNode << "->" << dest << " val: " << edge->val_ << " not added. Already exists" << std::endl;
 						}
 					// else go to next edge			
@@ -231,11 +238,11 @@ template <typename N, typename E>
 			{
 				auto findNode = nodes_.find(node);
 				if (findNode != nodes_.end()) {
-					if (DEBUG) std::cout << "deleting " << node << std::endl;
+				
 					findNode->second.reset();
 					nodes_.erase(findNode);
 				} else {
-					if (DEBUG) std::cout << "could not find " << node << std::endl;
+				
 				}
 			}
 
@@ -256,11 +263,7 @@ template <typename N, typename E>
 					if (findEdge != findNode->second->edges_.end()) {
 						findNode->second->edges_.erase(findEdge);
 						--findNode->second->numEdges_;
-					} else if (DEBUG) {
-						if (DEBUG) std::cout << "deleteEdge: no edge was found" << std::endl;
 					}
-				} else if (DEBUG) {
-					if (DEBUG) std::cout << "deleteEdge: origin: " << orig << " not found" << std::endl;
 				}
 			}
 
@@ -277,9 +280,9 @@ template <typename N, typename E>
 			bool isConnected(const N& orig, const N& dest) const
 			{
 				auto findOrig = nodes_.find(orig);
-				if (findOrig == nodes_.end()) throw std::runtime_error("addEdge: origin DNE");
+				if (findOrig == nodes_.end()) throw std::runtime_error("addEdge: origin Does not exist");
 				auto findDest = nodes_.find(dest);
-				if (findDest == nodes_.end()) throw std::runtime_error("addEdge: dest DNE");
+				if (findDest == nodes_.end()) throw std::runtime_error("addEdge: dest Does not exist");
 
 				// find if the edge exists in orig to dest
 				auto findEdge = std::find_if(findOrig->second->edges_.begin(), findOrig->second->edges_.end(),
@@ -298,17 +301,18 @@ template <typename N, typename E>
 			
 			void printNodes() const
 			{
-				if (DEBUG) std::cout << "printNodes" << std::endl;
+			
 				for (auto it =Internal_Begin(); it !=Internal_End(); ++it ) {
 					std::cout << *it << std::endl;
 				}
 			}
 
+
 			void printEdges(const N& node) const
 			{
 				// check if the node exists
 				auto findOrig = nodes_.find(node);
-				if (findOrig == nodes_.end()) throw std::runtime_error("printEdges: node DNE");
+				if (findOrig == nodes_.end()) throw std::runtime_error("printEdges: node Does not exist");
 				std::cout << "Edges attached to Node " << node << std::endl;
 				bool tmp = false;
 				for (auto it = edgeIteratorBegin(node); it != edgeIteratorEnd(node); ++it) {
@@ -319,13 +323,15 @@ template <typename N, typename E>
 				if (!tmp) std::cout << "(null)" << std::endl;
 			}
 			
-			void printGraph ()
+
+			void printGraph () const
 			{
 				std::cout << "Printing Graph" << std::endl;
 				for (auto n : nodes_) {
 					n.second->printNode(n.first);
 				}
 			}
+
 
 			Node_Iterator<N, E> Internal_Begin() const
 			{
@@ -335,25 +341,26 @@ template <typename N, typename E>
 
 			Node_Iterator<N, E> Internal_End() const
 			{
-				//std::cout << "test" << std::endl;
 				return Node_Iterator<N, E>(nullptr);
 			}
 			
-
 
 			void next() const
 			{
 				++curr;
 			};
 
+
 			void begin() const{
-				curr = Node_Iterator<N, E>(&nodes_);
+				curr = Node_Iterator<N, E>(true, &nodes_);
 			}
 
+
 			bool end() const{
-				if(curr == Node_Iterator<N, E>(nullptr)) return 1;
+				if(curr == Node_Iterator<N, E>(true, nullptr)) return 1;
 				else return 0;
 			}
+
 
 			const N& value() const
 			{
@@ -365,22 +372,25 @@ template <typename N, typename E>
 			{
 				auto findNode = nodes_.find(node);
 				if (findNode != nodes_.end()) {
-					//if (findNode->second)
 					return Edge_Iterator<N, E>(findNode->second);
 				}
-				throw std::runtime_error("edgeIteratorBegin: edge DNE");
+				throw std::runtime_error("edgeIteratorBegin: edge Does not exist");
 			}
+
 
 			Edge_Iterator<N, E> edgeIteratorEnd (const N& node) const 
 			{
 				return Edge_Iterator<N, E>(nullptr);
 			}
 			
+
 			Edge_Iterator<N, E> edgeIteratorEnd () const 
 			{
 				return Edge_Iterator<N, E>(nullptr);
 			}
 
+
 		private:
 			std::map< N, std::shared_ptr<Node> > nodes_;
 	};
+

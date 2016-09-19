@@ -1,18 +1,18 @@
 original graph
-b
-c
 a
 d
+c
+b
 Edges attached to Node b
 a 3
 d 4
 a 5
 moved-from graph (expected to be empty)
 moved-to graph
-b
-c
 a
 d
+c
+b
 Edges attached to Node b
 a 3
 d 4

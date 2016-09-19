@@ -9,6 +9,7 @@ Edges attached to Node 3
 2 3->2
 4 3->4
 4 cs6771
+In mergeReplace: 3->4 val: 2->4 not added. Already exists
 After calling mergReplace(2,3)
 Edges attached to Node 1
 (null)
