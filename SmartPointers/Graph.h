@@ -258,7 +258,7 @@ namespace gdwg
 	};
 
 
-	#include "graph.tem"
+	#include "Graph.tem"
 }
 
 #endif
