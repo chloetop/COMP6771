@@ -91,6 +91,7 @@ void insertRandomNumbers(btree<long>& testContainer, set<long>& stableContainer,
 bool confirmEverythingMatches(const btree<long>& testContainer, const set<long>& stableContainer) {
   cout << "Confirms the btree and the set " 
           "contain exactly the same values..." << endl;
+
   for (long i = kMinInteger; i <= kMaxInteger; i++) {
     bool foundInTree = (testContainer.find(i) != testContainer.end());
     bool foundInSet = (stableContainer.find(i) != stableContainer.end());
