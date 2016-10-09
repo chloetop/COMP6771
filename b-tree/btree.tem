@@ -1,5 +1,21 @@
+ /////////////////////////////////////////////////////////////// 
+ //                                                           //
+ //                         ###    ######   ######      ##    //
+ //                        ##      ##  ##   ##  ##     ###    //
+ //      #####    #####   ##           ##       ##      ##    //
+ //     ##       ##       #####       ##       ##       ##    //
+ //     ##        ####    ##  ##      ##       ##       ##    //
+ //     ##           ##   ##  ##     ##       ##        ##    //
+ //      #####   #####     ####      ##       ##        ##    //
+ //                                                           //
+ //             COMP6771 Assignment_4: The B-Tree             //
+ //                   BTREE TEMPLATE FILE                     //
+ //                        z5081713                           //
+ ///////////////////////////////////////////////////////////////
+
 #include <queue>
 
+// Default Constructor
 template <typename T>
 btree<T>::btree(size_t maxNodeElems) : nodeSize_(maxNodeElems),
                                        root_(nullptr),
@@ -7,6 +23,7 @@ btree<T>::btree(size_t maxNodeElems) : nodeSize_(maxNodeElems),
                                        last_(nullptr) {
 }
 
+// Copy Constructor
 template <typename T>
 btree<T>::btree(const btree<T>& original) : nodeSize_(original.nodeSize_),
                                             root_(nullptr),
@@ -103,6 +120,7 @@ btree<T>& btree<T>::operator=(btree<T>&& rhs) {
     return *this;
 }
 
+// Operator overloading for <<
 template <typename T>
 ostream& operator<<(ostream& out, const btree<T>& tree) {
     queue<typename btree<T>::node*> q;
@@ -129,6 +147,7 @@ ostream& operator<<(ostream& out, const btree<T>& tree) {
     return out;
 }
 
+// Implementation of FIND method
 template <typename T>
 typename btree<T>::iterator btree<T>::find(const T& elem) {
     node *cur = root_;
@@ -181,6 +200,7 @@ typename btree<T>::const_iterator btree<T>::find(const T& elem) const {
     return const_iterator(nullptr, 0, this);
 }
 
+// Implementation of INSERT method.
 template <typename T>
 pair<typename btree<T>::iterator, bool> btree<T>::insert(const T& elem) {
     node *cur = root_;
@@ -240,6 +260,7 @@ pair<typename btree<T>::iterator, bool> btree<T>::insert(const T& elem) {
     return make_pair(iterator(cur, i, this), true);
 }
 
+// Destructor. Boom!!
 template <typename T>
 btree<T>::~btree() {
     if (root_ != nullptr) {
