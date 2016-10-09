@@ -1,270 +1,147 @@
-//#include "btree.h"
-// your btree iterator implementation goes here
-template<typename T> typename btree_iterator<T>::reference
-btree_iterator<T>::operator *() const {
-	return pointee_->__elem_[idx_];
+template <typename T>
+typename btree_iterator<T>::btree_iterator& btree_iterator<T>::operator++() {
+    // If the right child exists, follow it and go down as deep
+    // as possible, only ever taking the first child
+    if (pointee_->numVals_ == pointee_->nodeSize_ && pointee_->children_[index_ + 1] != nullptr) {
+        pointee_ = pointee_->children_[index_ + 1];
+        index_ = 0;
+        while (pointee_->numVals_ == pointee_->nodeSize_ && pointee_->children_[0] != nullptr) {
+            pointee_ = pointee_->children_[0];
+        }
+    } else if (index_ < pointee_->numVals_ - 1) {
+        // Move horizontally across
+        ++index_;
+    } else if (pointee_->parent_ != nullptr && pointee_->parentIndex_ < pointee_->parent_->numVals_) {
+        // Go back up to the parent
+        index_ = pointee_->parentIndex_;
+        pointee_ = pointee_->parent_;
+    } else {
+        // This is the end
+        pointee_ = nullptr;
+        index_ = 0;
+    }
+
+    return *this;
 }
 
-template<typename T> btree_iterator<T>&
-btree_iterator<T>::operator ++() {
-	if (pointee_ == nullptr) {
-		pointee_ = btree_->head_;
-		idx_ = 0;
-	} else if (pointee_->__descendants_[idx_ + 1] != nullptr) {
-		// the pointed element have descendants after,
-		// got down the tree to the left-most descendant node
-		pointee_ = pointee_->__descendants_[idx_ + 1];
-		idx_ = 0;
-		asc_down();
-	} else if (idx_ < pointee_->__occupied_size_ - 1) {
-		// point to the next element in current node;
-		++idx_;
-	} else {
-		// reaches the end of current node, will go up
-		// to parent node.
-		asc_up (operator *());
-	}
-	return *this;
+template <typename T>
+typename btree_iterator<T>::btree_iterator& btree_iterator<T>::operator--() {
+    bool moved = false;
+
+    // If this is current pointing at 'end()' then we go to last
+    if (pointee_ == nullptr) {
+        pointee_ = tree_->last_;
+        index_ = pointee_->numVals_ - 1;
+        moved = true;
+    }
+
+    // If the left child exists, follow it and go down as deep
+    // as possible, only ever taking the last child
+    while (!moved && pointee_->numVals_ == pointee_->nodeSize_ && pointee_->children_[index_] != nullptr) {
+        pointee_ = pointee_->children_[index_];
+        index_ = pointee_->numVals_ - 1;
+        moved = true;
+    }
+    if (!moved && index_ > 0) {
+        // Move horizontally across
+        --index_;
+    } else if (!moved && pointee_->parent_ != nullptr) {
+        // Go back up to the parent
+        index_ = pointee_->parentIndex_ - 1;
+        pointee_ = pointee_->parent_;
+
+        // Keep going up while we can, if our index is screwed up
+        while (pointee_->parent_ != nullptr && index_ < 0) {
+            index_ = pointee_->parentIndex_ - 1;
+            pointee_ = pointee_->parent_;
+        }
+
+        // If our index is still screwed up at the end, this is the beginning
+        // TODO we don't actually need this
+        if (index_ < 0) {
+            pointee_ = nullptr;
+            index_ = 0;
+        }
+    }
+
+    return *this;
 }
 
-template<typename T> btree_iterator<T>&
-btree_iterator<T>::operator --(){
-	if (pointee_ == nullptr) {
-		pointee_ = btree_->tail_;
-		idx_ = pointee_->__occupied_size_ - 1;
-	} else if (pointee_->__descendants_[idx_] != nullptr) {
-		pointee_ = pointee_->__descendants_[idx_];
-		desc_down();
-	} else if (idx_ > 0) {
-		--idx_;
-	} else {
-		desc_up (operator *());
-	}
-	return *this;
+template <typename T>
+typename btree_iterator<T>::reference btree_iterator<T>::operator*() const {
+    return pointee_->vals_[index_];
 }
 
-template<typename T> btree_iterator<T>
-btree_iterator<T>::operator ++(int){
-	btree_iterator ret_ = *this;
-	operator ++();
-	return ret_;
+template <typename T>
+typename const_btree_iterator<T>::const_btree_iterator& const_btree_iterator<T>::operator++() {
+    // If the right child exists, follow it and go down as deep
+    // as possible, only ever taking the first child
+    if (pointee_->numVals_ == pointee_->nodeSize_ && pointee_->children_[index_ + 1] != nullptr) {
+        pointee_ = pointee_->children_[index_ + 1];
+        index_ = 0;
+        while (pointee_->numVals_ == pointee_->nodeSize_ && pointee_->children_[0] != nullptr) {
+            pointee_ = pointee_->children_[0];
+        }
+    } else if (index_ < pointee_->numVals_ - 1) {
+        // Move horizontally across
+        ++index_;
+    } else if (pointee_->parent_ != nullptr && pointee_->parentIndex_ < pointee_->parent_->numVals_) {
+        // Go back up to the parent
+        index_ = pointee_->parentIndex_;
+        pointee_ = pointee_->parent_;
+    } else {
+        // This is the end
+        pointee_ = nullptr;
+        index_ = 0;
+    }
+
+    return *this;
 }
 
-template<typename T> btree_iterator<T>
-btree_iterator<T>::operator --(int){
-	btree_iterator ret_ = *this;
-		operator --();
-		return ret_;
+template <typename T>
+typename const_btree_iterator<T>::const_btree_iterator& const_btree_iterator<T>::operator--() {
+    bool moved = false;
+
+    // If this is current pointing at 'end()' then we go to last
+    if (pointee_ == nullptr) {
+        pointee_ = tree_->last_;
+        index_ = pointee_->numVals_ - 1;
+        moved = true;
+    }
+
+    // If the left child exists, follow it and go down as deep
+    // as possible, only ever taking the last child
+    while (!moved && pointee_->numVals_ == pointee_->nodeSize_ && pointee_->children_[index_] != nullptr) {
+        pointee_ = pointee_->children_[index_];
+        index_ = pointee_->numVals_ - 1;
+        moved = true;
+    }
+    if (!moved && index_ > 0) {
+        // Move horizontally across
+        --index_;
+    } else if (!moved && pointee_->parent_ != nullptr) {
+        // Go back up to the parent
+        index_ = pointee_->parentIndex_ - 1;
+        pointee_ = pointee_->parent_;
+
+        // Keep going up while we can, if our index is screwed up
+        while (pointee_->parent_ != nullptr && index_ < 0) {
+            index_ = pointee_->parentIndex_ - 1;
+            pointee_ = pointee_->parent_;
+        }
+
+        // If our index is still screwed up at the end, this is the beginning
+        // TODO we don't actually need this
+        if (index_ < 0) {
+            pointee_ = nullptr;
+            index_ = 0;
+        }
+    }
+
+    return *this;
 }
 
-template<typename T> btree_iterator<T>&
-btree_iterator<T>::operator =(const btree_iterator& other) {
-	if (this == &other) {
-		return *this;
-	} else {
-		pointee_ = other.pointee_;
-		idx_ = other.idx_;
-		btree_ = other.btree_;
-		return *this;
-	}
-}
-
-template<typename T> bool
-btree_iterator<T>::operator ==(const btree_iterator<T>& other) const {
-	return (btree_ == other.btree_ && pointee_ == other.pointee_ && idx_ == other.idx_);
-}
-
-template<typename T> bool
-btree_iterator<T>::operator ==(const const_btree_iterator<T>& other) const {
-	return (btree_ == other.btree_ && pointee_ == other.pointee_ && idx_ == other.idx_);
-}
-
-template<typename T> void
-btree_iterator<T>::asc_up(const T& e){
-	if (pointee_->__parent_ == nullptr) {
-		// already the at root node
-		pointee_ = nullptr;
-		idx_ = 0;
-		return;
-	} else {
-		pointee_ = pointee_->__parent_;
-		for (idx_ = 0; idx_ < pointee_->__occupied_size_; ++idx_) {
-			if (pointee_->__elem_[idx_] > e)
-				return;
-		}
-		asc_up(e);
-	}
-}
-
-template<typename T> void
-btree_iterator<T>::asc_down(){
-	if (pointee_->__descendants_[0] == nullptr)
-		return;
-	pointee_ = pointee_->__descendants_[0];
-	asc_down();
-}
-
-template<typename T> void
-btree_iterator<T>::desc_up(const T& e){
-	if (pointee_->__parent_ == nullptr) {
-		pointee_ = nullptr;
-		idx_ = 0;
-		return;
-	} else {
-		pointee_ = pointee_->__parent_;
-		for (idx_ = pointee_->__occupied_size_ - 1; idx_ >= 0; --idx_) {
-			if (pointee_->__elem_[idx_] < e)
-				return;
-			if (idx_ == 0)
-				break;
-		}
-		desc_up(e);
-	}
-}
-
-template<typename T> void
-btree_iterator<T>::desc_down() {
-	idx_ = pointee_->__occupied_size_ - 1;
-	if (pointee_->__descendants_[idx_ + 1] == nullptr)
-		return;
-	pointee_ = pointee_->__descendants_[idx_ + 1];
-	desc_down();
-}
-
-template<typename T> typename const_btree_iterator<T>::reference
-const_btree_iterator<T>::operator *() const {
-	return pointee_->__elem_[idx_];
-}
-
-template<typename T> const_btree_iterator<T>&
-const_btree_iterator<T>::operator ++() {
-	if (pointee_ == nullptr) {
-		pointee_ = btree_->head_;
-		idx_ = 0;
-		return *this;
-	}
-
-	if (pointee_->__descendants_[idx_ + 1] != nullptr) {
-		pointee_ = pointee_->__descendants_[idx_ + 1];
-		idx_ = 0;
-		asc_down();
-		return *this;
-	}
-
-	if (idx_ < pointee_->__occupied_size_ - 1) {
-		++idx_;
-		return *this;
-	}
-
-	asc_up(operator *());
-	return *this;
-}
-
-template<typename T> const_btree_iterator<T>&
-const_btree_iterator<T>::operator --() {
-	if (pointee_ == nullptr) {
-		pointee_ = btree_->tail_;
-		idx_ = pointee_->__occupied_size_ - 1;
-		return *this;
-	}
-
-	if (pointee_->__descendants_[idx_] != nullptr) {
-		pointee_ = pointee_->__descendants_[idx_];
-		desc_down();
-		return *this;
-	}
-
-	if (idx_ > 0) {
-		--idx_;
-		return *this;
-	}
-
-	desc_up(operator *());
-	return *this;
-}
-
-template<typename T> const_btree_iterator<T>
-const_btree_iterator<T>::operator ++(int) {
-	const_btree_iterator ret = *this;
-	operator ++();
-	return ret;
-}
-
-template<typename T> const_btree_iterator<T>
-const_btree_iterator<T>::operator --(int) {
-	const_btree_iterator ret = *this;
-	operator --();
-	return ret;
-}
-
-template<typename T> const_btree_iterator<T>&
-const_btree_iterator<T>::operator =(const const_btree_iterator& other) {
-	if (this == &other) {
-		return *this;
-	} else {
-		pointee_ = other.pointee_;
-		idx_ = other.idx_;
-		btree_ = other.btree_;
-		return *this;
-	}
-}
-
-template<typename T> bool
-const_btree_iterator<T>::operator ==(
-		const const_btree_iterator& other) const {
-	return (btree_ == other.btree_ && pointee_ == other.pointee_ && idx_ == other.idx_);
-}
-
-template<typename T> bool
-const_btree_iterator<T>::operator ==(
-		const btree_iterator<T>& other) const {
-	return (btree_ == other.btree_ && pointee_ == other.pointee_ && idx_ == other.idx_);
-}
-
-template<typename T> void
-const_btree_iterator<T>::asc_up(const T& e) {
-	if (pointee_->__parent_ == nullptr) {
-		// already the at root node
-		pointee_ = nullptr;
-		idx_ = 0;
-		return;
-	} else {
-		pointee_ = pointee_->__parent_;
-		for (idx_ = 0; idx_ < pointee_->__occupied_size_; ++idx_) {
-			if (pointee_->__elem_[idx_] > e) return;
-		}
-		asc_up(e);
-	}
-}
-
-template<typename T> void
-const_btree_iterator<T>::asc_down() {
-	if (pointee_->__descendants_[0] == nullptr)
-		return;
-	pointee_ = pointee_->__descendants_[0];
-	asc_down();
-}
-
-template<typename T> void
-const_btree_iterator<T>::desc_up(const T& e) {
-	if (pointee_->__parent_ == nullptr) {
-		pointee_ = nullptr;
-		idx_ = 0;
-		return;
-	} else {
-		pointee_ = pointee_->__parent_;
-		for (idx_ = pointee_->__occupied_size_ - 1; idx_ >= 0; --idx_) {
-			if (pointee_->__elem_[idx_] < e) return;
-			if (idx_ == 0) break;
-		}
-		desc_up(e);
-	}
-}
-
-template<typename T> void
-const_btree_iterator<T>::desc_down() {
-	idx_ = pointee_->__occupied_size_ - 1;
-	if (pointee_->__descendants_[idx_ + 1] == nullptr) return;
-	pointee_ = pointee_->__descendants_[idx_ + 1];
-	desc_down();
+template <typename T>
+typename const_btree_iterator<T>::reference const_btree_iterator<T>::operator*() const {
+    return pointee_->vals_[index_];
 }
