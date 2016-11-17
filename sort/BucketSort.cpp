@@ -55,13 +55,13 @@ void BucketSort::sort(unsigned int numCores) {
 	}
 
 	for (unsigned int i=1; i<=numCores; i++){
-		t[i] = std::thread([this](unsigned int i){ std::sort(vecs[i+1].begin(),vecs[i+1].end(),compare_vecs); }, i);
+		t[i] = std::thread([this](unsigned int i){ std::sort(vecs[i].begin(),vecs[i].end(),compare_vecs); }, i);
 	}
 
 	//for Reserving::
 	unsigned int size=0;																			// <<<< ADDED FOR RESUBMISSION
 	for (unsigned int i=1; i<=numCores; i++){														// <<<< ADDED FOR RESUBMISSION
-		size += vecs[i+1].size();																	// <<<< ADDED FOR RESUBMISSION
+		size += vecs[i].size();																	// <<<< ADDED FOR RESUBMISSION
 	}																								// <<<< ADDED FOR RESUBMISSION
 
 
@@ -88,11 +88,11 @@ void BucketSort::sort(unsigned int numCores) {
 	for (unsigned int i=1; i<=numCores; i++){														// <<<< ADDED FOR RESUBMISSION
 		if(i==0){																					// <<<< ADDED FOR RESUBMISSION
 			t[i].join();																			// <<<< ADDED FOR RESUBMISSION
-			numbersToSort = std::move(vecs[i+1]);													// <<<< ADDED FOR RESUBMISSION
+			numbersToSort = std::move(vecs[i]);													// <<<< ADDED FOR RESUBMISSION
 		}																							// <<<< ADDED FOR RESUBMISSION
 		else{																						// <<<< ADDED FOR RESUBMISSION
 			t[i].join();																			// <<<< ADDED FOR RESUBMISSION
-    		std::move(std::begin(vecs[i+1]), std::end(vecs[i+1]), std::back_inserter(numbersToSort));// <<<< ADDED FOR RESUBMISSION
+    		std::move(std::begin(vecs[i]), std::end(vecs[i]), std::back_inserter(numbersToSort));// <<<< ADDED FOR RESUBMISSION
 		}																							// <<<< ADDED FOR RESUBMISSION
 	}																								// <<<< ADDED FOR RESUBMISSION
 	// t1.join();
