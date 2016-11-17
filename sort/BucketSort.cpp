@@ -48,7 +48,7 @@ void BucketSort::sort(unsigned int numCores) {
 		std::cout<<"NumCores exceeded Limit. try with a smaller number";							// <<<< ADDED FOR RESUBMISSION
 		exit(0);																					// <<<< ADDED FOR RESUBMISSION
 	}																								// <<<< ADDED FOR RESUBMISSION
-	std::vector<std::thread> t(numCores+1);															// <<<< ADDED FOR RESUBMISSION
+	std::vector<std::thread> t(NUMCORES_MAX+1);															// <<<< ADDED FOR RESUBMISSION
 
 	for (unsigned int n : numbersToSort) {
 		vecs[BucketSort::lead(n)].push_back(n);
