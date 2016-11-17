@@ -45,8 +45,8 @@ void BucketSort::sort(unsigned int numCores) {
 
 
 	if (numCores >= NUMCORES_MAX){																	// <<<< ADDED FOR RESUBMISSION
-		cout<<"NumCores exceeded Limit. try with a smaller number";									// <<<< ADDED FOR RESUBMISSION
-		exit();																						// <<<< ADDED FOR RESUBMISSION
+		std::cout<<"NumCores exceeded Limit. try with a smaller number";							// <<<< ADDED FOR RESUBMISSION
+		exit(0);																					// <<<< ADDED FOR RESUBMISSION
 	}																								// <<<< ADDED FOR RESUBMISSION
 	std::vector<std::thread> t(numCores);															// <<<< ADDED FOR RESUBMISSION
 
@@ -55,7 +55,7 @@ void BucketSort::sort(unsigned int numCores) {
 	}
 
 	for (int i=0; i<numCores; i++){
-		t[i] = [this](i){ std::sort(vecs[i+1].begin(),vecs[i+1].end(),compare_vecs); };
+		t[i] = [this](int i){ std::sort(vecs[i+1].begin(),vecs[i+1].end(),compare_vecs); };
 	}
 
 	//for Reserving::
