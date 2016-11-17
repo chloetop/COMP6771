@@ -48,19 +48,19 @@ void BucketSort::sort(unsigned int numCores) {
 		std::cout<<"NumCores exceeded Limit. try with a smaller number";							// <<<< ADDED FOR RESUBMISSION
 		exit(0);																					// <<<< ADDED FOR RESUBMISSION
 	}																								// <<<< ADDED FOR RESUBMISSION
-	std::vector<std::thread> t(numCores);															// <<<< ADDED FOR RESUBMISSION
+	std::vector<std::thread> t(numCores+1);															// <<<< ADDED FOR RESUBMISSION
 
 	for (unsigned int n : numbersToSort) {
 		vecs[BucketSort::lead(n)].push_back(n);
 	}
 
-	for (unsigned int i=0; i<=numCores; i++){
+	for (unsigned int i=1; i<=numCores; i++){
 		t[i] = std::thread([this](unsigned int i){ std::sort(vecs[i+1].begin(),vecs[i+1].end(),compare_vecs); }, i);
 	}
 
 	//for Reserving::
-	unsigned int size=0;																						// <<<< ADDED FOR RESUBMISSION
-	for (unsigned int i=0; i<=numCores; i++){																	// <<<< ADDED FOR RESUBMISSION
+	unsigned int size=0;																			// <<<< ADDED FOR RESUBMISSION
+	for (unsigned int i=1; i<=numCores; i++){														// <<<< ADDED FOR RESUBMISSION
 		size += vecs[i+1].size();																	// <<<< ADDED FOR RESUBMISSION
 	}																								// <<<< ADDED FOR RESUBMISSION
 
@@ -85,7 +85,7 @@ void BucketSort::sort(unsigned int numCores) {
 
 
 	// Join threads and consolidate results
-	for (unsigned int i=0; i<=numCores; i++){																	// <<<< ADDED FOR RESUBMISSION
+	for (unsigned int i=1; i<=numCores; i++){														// <<<< ADDED FOR RESUBMISSION
 		if(i==0){																					// <<<< ADDED FOR RESUBMISSION
 			t[i].join();																			// <<<< ADDED FOR RESUBMISSION
 			numbersToSort = std::move(vecs[i+1]);													// <<<< ADDED FOR RESUBMISSION
