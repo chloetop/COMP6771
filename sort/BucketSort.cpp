@@ -54,13 +54,13 @@ void BucketSort::sort(unsigned int numCores) {
 		vecs[BucketSort::lead(n)].push_back(n);
 	}
 
-	for (int i=0; i<numCores; i++){
-		t[i] = [this](int i){ std::sort(vecs[i+1].begin(),vecs[i+1].end(),compare_vecs); };
+	for (unsigned int i=0; i<numCores; i++){
+		t[i] = [this](unsigned int i){ std::sort(vecs[i+1].begin(),vecs[i+1].end(),compare_vecs); };
 	}
 
 	//for Reserving::
-	int size=0;																						// <<<< ADDED FOR RESUBMISSION
-	for (int i=0; i<numCores; i++){																	// <<<< ADDED FOR RESUBMISSION
+	unsigned int size=0;																						// <<<< ADDED FOR RESUBMISSION
+	for (unsigned int i=0; i<numCores; i++){																	// <<<< ADDED FOR RESUBMISSION
 		size += vecs[i+1].size();																	// <<<< ADDED FOR RESUBMISSION
 	}																								// <<<< ADDED FOR RESUBMISSION
 
@@ -85,7 +85,7 @@ void BucketSort::sort(unsigned int numCores) {
 
 
 	// Join threads and consolidate results
-	for (int i=0; i<numCores; i++){																	// <<<< ADDED FOR RESUBMISSION
+	for (unsigned int i=0; i<numCores; i++){																	// <<<< ADDED FOR RESUBMISSION
 		if(i==0){																					// <<<< ADDED FOR RESUBMISSION
 			t[i].join();																			// <<<< ADDED FOR RESUBMISSION
 			numbersToSort = std::move(vecs[i+1]);													// <<<< ADDED FOR RESUBMISSION
