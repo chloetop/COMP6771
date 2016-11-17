@@ -55,7 +55,7 @@ void BucketSort::sort(unsigned int numCores) {
 	}
 
 	for (unsigned int i=0; i<numCores; i++){
-		t[i] = std::thread([this](unsigned int i){ std::cout<<i<<std::endl;std::sort(vecs[i+1].begin(),vecs[i+1].end(),compare_vecs); }, i);
+		t[i] = std::thread([this](unsigned int i){ std::sort(vecs[i+1].begin(),vecs[i+1].end(),compare_vecs); }, i);
 	}
 
 	//for Reserving::
