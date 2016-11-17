@@ -55,7 +55,7 @@ void BucketSort::sort(unsigned int numCores) {
 	}
 
 	for (unsigned int i=1; i<=numCores; i++){
-		t[i] = std::thread([this](unsigned int i){ std::sort(vecs[i].begin(),vecs[i].end(),compare_vecs); }, i);
+		t[i-1] = std::thread([this](unsigned int i){ std::sort(vecs[i].begin(),vecs[i].end(),compare_vecs); }, i);
 	}
 
 	//for Reserving::
@@ -87,11 +87,11 @@ void BucketSort::sort(unsigned int numCores) {
 	// Join threads and consolidate results
 	for (unsigned int i=1; i<=numCores; i++){														// <<<< ADDED FOR RESUBMISSION
 		if(i==0){																					// <<<< ADDED FOR RESUBMISSION
-			t[i].join();																			// <<<< ADDED FOR RESUBMISSION
+			t[i-1].join();																			// <<<< ADDED FOR RESUBMISSION
 			numbersToSort = std::move(vecs[i]);													// <<<< ADDED FOR RESUBMISSION
 		}																							// <<<< ADDED FOR RESUBMISSION
 		else{																						// <<<< ADDED FOR RESUBMISSION
-			t[i].join();																			// <<<< ADDED FOR RESUBMISSION
+			t[i-1].join();																			// <<<< ADDED FOR RESUBMISSION
     		std::move(std::begin(vecs[i]), std::end(vecs[i]), std::back_inserter(numbersToSort));// <<<< ADDED FOR RESUBMISSION
 		}																							// <<<< ADDED FOR RESUBMISSION
 	}																								// <<<< ADDED FOR RESUBMISSION
