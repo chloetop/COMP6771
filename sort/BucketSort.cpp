@@ -85,7 +85,7 @@ void BucketSort::sort(unsigned int numCores) {
 
 
 	// Join threads and consolidate results
-	for (unsigned int i=1; i<=numCores; i++){														// <<<< ADDED FOR RESUBMISSION
+	for (unsigned int i=1; i<=numCores+1; i++){														// <<<< ADDED FOR RESUBMISSION
 		if(i==1){																					// <<<< ADDED FOR RESUBMISSION
 			t[i-1].join();																			// <<<< ADDED FOR RESUBMISSION
 			numbersToSort = std::move(vecs[i]);													// <<<< ADDED FOR RESUBMISSION
